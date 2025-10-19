@@ -6,7 +6,7 @@ export class Cart {
     constructor() {}
 
     getItems(): IProduct[] {
-        return [...this.items];
+        return this.items;
     }
 
     addItem(item: IProduct): void {

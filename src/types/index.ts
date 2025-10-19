@@ -27,7 +27,7 @@ export interface IApiProductsResponse {
     items: IProduct[];
 }
 
-export interface IOrderPayload {
-    buyer: IBuyer;
-    items: { id: string; price: number | null }[];
+export interface IOrderPayload extends IBuyer {
+    items: string[];
+    total: number;
 }
