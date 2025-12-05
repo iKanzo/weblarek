@@ -1,4 +1,4 @@
-import {IEvents} from "../base/events";
+import {IEvents} from "../base/Events";
 
 export interface IModal {
     open(): void;
@@ -11,6 +11,8 @@ export class Modal implements IModal {
     protected closeButton: HTMLButtonElement;
     protected _content: HTMLElement;
     protected _pageWrapper: HTMLElement;
+    private _handleEsc: (e: KeyboardEvent) => void;
+    private _scrollPosition: number = 0;
 
     constructor(modalContainer: HTMLElement, protected events: IEvents) {
         this.modalContainer = modalContainer;
@@ -21,6 +23,14 @@ export class Modal implements IModal {
         this.closeButton.addEventListener('click', this.close.bind(this));
         this.modalContainer.addEventListener('click', this.close.bind(this));
         this.modalContainer.querySelector('.modal__container').addEventListener('click', event => event.stopPropagation());
+
+        this._handleEsc = this._onEsc.bind(this);
+    }
+
+    private _onEsc(e: KeyboardEvent) {
+        if (e.key === 'Escape') {
+            this.close();
+        }
     }
 
     // принимает элемент разметки которая будет отображаться в "modal__content" модального окна
@@ -30,14 +40,22 @@ export class Modal implements IModal {
 
     // открытие модального окна
     open() {
+        this._scrollPosition = window.scrollY || window.pageYOffset;
         this.modalContainer.classList.add('modal_active');
+        document.addEventListener('keydown', this._handleEsc);
+        this.locked = true;
+        this._pageWrapper.style.top = `-${this._scrollPosition}px`;
         this.events.emit('modal:open');
     }
 
     // закрытие модального окна
     close() {
         this.modalContainer.classList.remove('modal_active');
-        this.content = null; // очистка контента в модальном окне
+        this.content = null;
+        document.removeEventListener('keydown', this._handleEsc);
+        this.locked = false;
+        this._pageWrapper.style.top = '';
+        window.scrollTo(0, this._scrollPosition);
         this.events.emit('modal:close');
     }
 
