@@ -1,8 +1,8 @@
-import {IActions, IProductItem} from "../../types";
-import {IEvents} from "../base/events";
+import {IActions, IProduct} from "../../types";
+import {IEvents} from "../base/Events";
 
 export interface ICard {
-    render(data: IProductItem): HTMLElement;
+    render(data: IProduct): HTMLElement;
 }
 
 export class Card implements ICard {
@@ -11,7 +11,9 @@ export class Card implements ICard {
     protected _cardTitle: HTMLElement;
     protected _cardImage: HTMLImageElement;
     protected _cardPrice: HTMLElement;
-    protected _colors = <Record<string, string>>{
+    protected _product: IProduct;
+
+    protected _colors = {
         "дополнительное": "additional",
         "софт-скил": "soft",
         "кнопка": "button",
@@ -27,35 +29,26 @@ export class Card implements ICard {
         this._cardPrice = this._cardElement.querySelector('.card__price');
 
         if (actions?.onClick) {
-            this._cardElement.addEventListener('click', actions.onClick);
+            this._cardElement.addEventListener('click', () => actions.onClick(this._product));
         }
     }
 
-    protected setText(element: HTMLElement, value: unknown): string {
-        if (element) {
-            return element.textContent = String(value);
-        }
+    public setPrice(value: number | null): string {
+        if (value === null) return 'Бесценно';
+        return `${value} синапсов`;
     }
 
-    set cardCategory(value: string) {
-        this.setText(this._cardCategory, value);
-        this._cardCategory.className = `card__category card__category_${this._colors[value]}`
-    }
 
-    protected setPrice(value: number | null): string {
-        if (value === null) {
-            return 'Бесценно'
-        }
-        return String(value) + ' синапсов'
-    }
+    render(data: IProduct): HTMLElement {
+        this._product = data;
 
-    render(data: IProductItem): HTMLElement {
         this._cardCategory.textContent = data.category;
-        this.cardCategory = data.category;
+        this._cardCategory.className = `card__category card__category_${this._colors[data.category]}`;
         this._cardTitle.textContent = data.title;
         this._cardImage.src = data.image;
-        this._cardImage.alt = this._cardTitle.textContent;
-        this._cardPrice.textContent = this.setPrice(data.price);
+        this._cardImage.alt = data.title;
+        this._cardPrice.textContent = data.price === null ? 'Бесценно' : `${data.price} синапсов`;
+
         return this._cardElement;
     }
 }

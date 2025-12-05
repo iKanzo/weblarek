@@ -1,31 +1,17 @@
 import {IEvents} from '../base/Events';
-import {FormErrors} from '../../types'
+import {FormErrors, TPayment} from '../../types'
 
-export interface IFormModel {
-    payment: string;
-    email: string;
-    phone: string;
-    address: string;
-    total: number;
-    items: string[];
-    setOrderAddress(field: string, value: string): void
-    validateOrder(): boolean;
-    setOrderData(field: string, value: string): void
-    validateContacts(): boolean;
-    getOrderLot(): object;
-}
-
-export class FormModel implements IFormModel {
-    payment: string;
-    email: string;
-    phone: string;
-    address: string;
+export class Buyer {
+    payment: TPayment | null = null;
+    email = '';
+    phone = '';
+    address = '';
     total: number;
     items: string[];
     formErrors: FormErrors = {};
 
     constructor(protected events: IEvents) {
-        this.payment = '';
+        this.payment = null;
         this.email = '';
         this.phone = '';
         this.address = '';
@@ -109,7 +95,7 @@ export class FormModel implements IFormModel {
             phone: this.phone,
             address: this.address,
             total: this.total,
-            items: this.items,
-        }
+            items: this.items
+        };
     }
 }
