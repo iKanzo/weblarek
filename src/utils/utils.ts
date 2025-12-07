@@ -136,3 +136,10 @@ export function createElement<
     }
     return element;
 }
+
+export function formatPrice(value: number | null): string {
+    if (value === null) {
+        return 'Бесценно';
+    }
+    return `${value} синапсов`;
+}

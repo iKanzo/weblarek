@@ -8,7 +8,7 @@ export interface IOrder {
     render(): HTMLElement;
 }
 
-export class Order implements IOrder {
+export class FormOrder implements IOrder {
     formOrder: HTMLFormElement;
     buttonAll: HTMLButtonElement[];
     buttonSubmit: HTMLButtonElement;
@@ -22,8 +22,7 @@ export class Order implements IOrder {
 
         this.buttonAll.forEach(item => {
             item.addEventListener('click', () => {
-                this.paymentSelection = item.name;
-                events.emit('order:paymentSelection', item);
+                events.emit('order:paymentSelection', item.name);
             });
         });
 

@@ -7,9 +7,8 @@ export interface IBasket {
     basketList: HTMLElement;
     button: HTMLButtonElement;
     basketPrice: HTMLElement;
-    headerBasketButton: HTMLButtonElement;
-    headerBasketCounter: HTMLElement;
-    renderHeaderBasketCounter(value: number): void;
+
+    set items(items: HTMLElement[]);
     renderSumAllProducts(sumAll: number): void;
     render(): HTMLElement;
 }
@@ -20,8 +19,6 @@ export class Basket implements IBasket {
     basketList: HTMLElement;
     button: HTMLButtonElement;
     basketPrice: HTMLElement;
-    headerBasketButton: HTMLButtonElement;
-    headerBasketCounter: HTMLElement;
 
     constructor(template: HTMLTemplateElement, protected events: IEvents) {
         this.basket = template.content.querySelector('.basket').cloneNode(true) as HTMLElement;
@@ -29,11 +26,10 @@ export class Basket implements IBasket {
         this.basketList = this.basket.querySelector('.basket__list');
         this.button = this.basket.querySelector('.basket__button');
         this.basketPrice = this.basket.querySelector('.basket__price');
-        this.headerBasketButton = document.querySelector('.header__basket');
-        this.headerBasketCounter = document.querySelector('.header__basket-counter');
 
-        this.button.addEventListener('click', () => { this.events.emit('order:open') });
-        this.headerBasketButton.addEventListener('click', () => { this.events.emit('basket:open') });
+        this.button.addEventListener('click', () => {
+            this.events.emit('order:open');
+        });
 
         this.items = [];
     }
@@ -44,12 +40,10 @@ export class Basket implements IBasket {
             this.button.removeAttribute('disabled');
         } else {
             this.button.setAttribute('disabled', 'disabled');
-            this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
+            this.basketList.replaceChildren(
+                createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' })
+            );
         }
-    }
-
-    renderHeaderBasketCounter(value: number) {
-        this.headerBasketCounter.textContent = String(value);
     }
 
     renderSumAllProducts(sumAll: number) {

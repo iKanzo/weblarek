@@ -3,13 +3,13 @@ import {IEvents} from "../base/Events";
 
 export interface IProducts {
     productCards: IProduct[];
-    selectedСard: IProduct;
+    selectedCard: IProduct;
     setPreview(item: IProduct): void;
 }
 
 export class Products implements IProducts {
     protected _productCards: IProduct[];
-    selectedСard: IProduct;
+    selectedCard: IProduct;
 
     constructor(protected events: IEvents) {
         this._productCards = []
@@ -25,7 +25,7 @@ export class Products implements IProducts {
     }
 
     setPreview(item: IProduct) {
-        this.selectedСard = item;
+        this.selectedCard = item;
         this.events.emit('modalCard:open', item)
     }
 }

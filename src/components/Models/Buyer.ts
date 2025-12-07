@@ -6,8 +6,6 @@ export class Buyer {
     email = '';
     phone = '';
     address = '';
-    total: number;
-    items: string[];
     formErrors: FormErrors = {};
 
     constructor(protected events: IEvents) {
@@ -15,8 +13,6 @@ export class Buyer {
         this.email = '';
         this.phone = '';
         this.address = '';
-        this.total = 0;
-        this.items = [];
     }
 
     // принимаем значение строки "address"
@@ -94,8 +90,6 @@ export class Buyer {
             email: this.email,
             phone: this.phone,
             address: this.address,
-            total: this.total,
-            items: this.items
         };
     }
 }

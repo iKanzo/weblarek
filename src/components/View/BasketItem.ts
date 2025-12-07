@@ -1,5 +1,6 @@
-import {IActions, IProductItem} from "../../types";
+import {IActions, IProduct} from "../../types";
 import {IEvents} from "../base/Events";
+import {formatPrice} from '../../utils/utils';
 
 export interface IBasketItem {
     basketItem: HTMLElement;
@@ -7,7 +8,7 @@ export interface IBasketItem {
     title: HTMLElement;
     price: HTMLElement;
     buttonDelete: HTMLButtonElement;
-    render(data: IProductItem, item: number): HTMLElement;
+    render(data: IProduct, item: number): HTMLElement;
 }
 
 export class BasketItem implements IBasketItem {
@@ -29,17 +30,14 @@ export class BasketItem implements IBasketItem {
         }
     }
 
-    protected setPrice(value: number | null) {
-        if (value === null) {
-            return 'Бесценно'
-        }
-        return String(value) + ' синапсов'
+    protected getPrice(value: number | null): string {
+        return formatPrice(value);
     }
 
-    render(data: IProductItem, item: number) {
+    render(data: IProduct, item: number) {
         this.index.textContent = String(item);
         this.title.textContent = data.title;
-        this.price.textContent = this.setPrice(data.price);
+        this.price.textContent = this.getPrice(data.price);
         return this.basketItem;
     }
 }

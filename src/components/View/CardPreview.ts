@@ -68,7 +68,7 @@ export class CardPreview extends Card implements ICard {
     render(data: IProduct): HTMLElement {
         this._product = data;
         this._cardCategory.textContent = data.category;
-        this.cardCategory = data.category;
+        this._cardCategory = data.category;
         this._cardTitle.textContent = data.title;
         this._cardImage.src = data.image;
         this._cardImage.alt = this._cardTitle.textContent;
